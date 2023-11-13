@@ -84,33 +84,33 @@ public interface BottlingCompanyService {
 
     // ========================= SUPERVISOR =======================
 
-    /*
+    /**
      * GET
      * @param companyId company's unique ID
      * @param superiorId Superior's Unique ID
      * @return  All Supervisors under the Superior in the Company
      */
-//    public List<Supervisor> getAllSupervisorsInCompanyUnderSuperior(String companyId, String superiorId);
+    public List<Supervisor> getAllSupervisorsInCompanyUnderSuperior(String companyId, String superiorId);
 
-    /*
+    /**
      * POST
      * @param companyId company ID
      * @param superiorId superior's Unique ID
      * @param newSupervisor Supervisor Object to be saved in DB
      * @return  Saved Supervisor Object
      */
-//    public Supervisor saveSupervisorInCompanyUnderSupervisor(String companyId, String superiorId, Supervisor newSupervisor);
+    public Supervisor saveSupervisorInCompanyUnderSuperior(String companyId, String superiorId, Supervisor newSupervisor);
 
-    /*
+    /**
      * GET
      * @param companyId Company Unique ID
      * @param superiorId Superior's Unique ID
      * @param supervisorId Supervisor's Unique ID
      * @return Supervisor Object with all details
      */
-//    public Optional<Supervisor> getSupervisorByIdInCompanyUnderSupervisor(String companyId, String superiorId, String supervisorId);
+    public Supervisor getSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId);
 
-    /*
+    /**
      * PATCH
      * @param companyId Company's Unique ID
      * @param superiorId Superior's Unique ID
@@ -118,14 +118,14 @@ public interface BottlingCompanyService {
      * @param updatedSupervisor Updated Object to be sent to DB
      * @return Updated Obj if success else Null
      */
-//    public ResponseEntity<Supervisor> updateSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId, Supervisor updatedSupervisor);
+    public ResponseEntity<Supervisor> updateSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId, Supervisor updatedSupervisor);
 
-    /*
+    /**
      * DELETE
      * @param companyId Company's Unique ID
      * @param superiorId Superior's Unique ID
      * @param supervisorId Supervisor's Unique ID
      * @return Boolean, true if success, else false
      */
-//    public boolean deleteSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId);
+    public boolean deleteSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId);
 }

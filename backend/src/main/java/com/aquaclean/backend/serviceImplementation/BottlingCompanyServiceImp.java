@@ -5,11 +5,9 @@ import com.aquaclean.backend.models.Superior;
 import com.aquaclean.backend.models.Supervisor;
 import com.aquaclean.backend.repository.BottlingCompanyRepository;
 import com.aquaclean.backend.services.BottlingCompanyService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,10 +216,223 @@ public class BottlingCompanyServiceImp implements BottlingCompanyService {
 
     // ========================================== SUPERVISOR ===================================
 
-//    public List<Supervisor> getAllSupervisorsInCompanyUnderSuperior(String companyId, String superiorID){
-//        Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
-//    }
+    public List<Supervisor> getAllSupervisorsInCompanyUnderSuperior(String companyId, String superiorID){
+        Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
 
+        if (searchBCompanyOptional.isPresent()){
+            List<Superior> superiorsList = searchBCompanyOptional.get().getSuperiors();
 
+            if (superiorsList != null){
+                Superior findSup = superiorsList.stream()
+                        .filter(superior -> superiorID.equals(superior.getEmployeeId()))
+                        .findAny()
+                        .orElse(null);
+
+                if (findSup == null) {
+                    System.out.println("Superior not present in Company");
+                    return null;
+                }
+                else
+                    return findSup.getSupervisors();
+            }
+            System.out.println("No Superiors present in Company");
+            return  null;
+        }
+        System.out.println("Company Not Present");
+        return null;
+    }
+
+    public Supervisor saveSupervisorInCompanyUnderSuperior(String companyId, String superiorId, Supervisor newSupervisor){
+        Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
+
+        if (searchBCompanyOptional.isPresent()){
+            List<Superior> superiorsList = searchBCompanyOptional.get().getSuperiors();
+
+            if (superiorsList != null){
+                Superior findSup = superiorsList.stream()
+                        .filter(superior -> superiorId.equals(superior.getEmployeeId()))
+                        .findAny()
+                        .orElse(null);
+
+                if (findSup == null) {
+                    System.out.println("Superior not present in Company");
+                    return null;
+                }
+                else {
+                    List<Supervisor> list = new ArrayList<>();
+
+                    if (findSup.getSupervisors() != null)
+                        list.addAll(findSup.getSupervisors());
+                    list.add(newSupervisor);
+
+                    findSup.setSupervisors(list);
+
+                    BottlingCompany updatedComp = searchBCompanyOptional.get();
+                    bCompanyRepo.save(updatedComp);
+                    return newSupervisor;
+                }
+            }
+            System.out.println("No Superiors present in Company");
+            return  null;
+        }
+        System.out.println("Company Not Present");
+        return null;
+    }
+
+    public Supervisor getSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId){
+        Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
+
+        if (searchBCompanyOptional.isPresent()){
+            List<Superior> superiorsList = searchBCompanyOptional.get().getSuperiors();
+
+            if (superiorsList != null){
+                Superior findSup = superiorsList.stream()
+                        .filter(superior -> superiorId.equals(superior.getEmployeeId()))
+                        .findAny()
+                        .orElse(null);
+
+                if (findSup == null) {
+                    System.out.println("Superior not present in Company");
+                    return null;
+                }
+                else {
+                    List<Supervisor> supervisorsList = findSup.getSupervisors();
+
+                    if (supervisorsList != null){
+                        Supervisor findSupervisor = supervisorsList.stream()
+                                .filter(supervisor -> supervisorId.equals(supervisor.getEmployeeId()))
+                                .findAny()
+                                .orElse(null);
+
+                        if (findSupervisor == null){
+                            System.out.println("Supervisor not found among supervisors Available under Superior");
+                            return null;
+                        }
+                        else {
+                            return findSupervisor;
+                        }
+
+                    }
+                    System.out.println("No Supervisors Available under Superior");
+                    return null;
+                }
+            }
+            System.out.println("No Superiors present in Company");
+            return  null;
+        }
+        System.out.println("Company Not Present");
+        return null;
+    }
+
+    public ResponseEntity<Supervisor> updateSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId, Supervisor updatedSupervisor){
+        Optional<BottlingCompany> searchCompanyOptional = bCompanyRepo.findById(companyId);
+
+        if (searchCompanyOptional.isPresent()){
+            List<Superior> searchSup = searchCompanyOptional.get().getSuperiors();
+
+            if (searchSup != null){
+                Superior findSup = searchSup.stream()
+                        .filter(superior -> superiorId.equals(superior.getEmployeeId()))
+                        .findAny()
+                        .orElse(null);
+
+                if (findSup == null){
+                    System.out.println("Superior Not Present in the Collection");
+                    return null;
+                } else {
+                    List<Supervisor> searchSupervisor = findSup.getSupervisors();
+
+                    if (searchSupervisor == null){
+                        System.out.println("Supervisors List Empty under given Superior");
+                        return null;
+                    } else {
+                        Supervisor findSupervisor = searchSupervisor.stream()
+                                .filter(supervisor -> supervisor.getEmployeeId().equals(updatedSupervisor.getEmployeeId()))
+                                .findAny()
+                                .orElse(null);
+
+                        if (findSupervisor ==  null) {
+                            System.out.println("Cannot Find Supervisor under the given Superior");
+                            return null;
+                        } else {
+                            if (updatedSupervisor.getSupervisorFullName() != null)
+                                findSupervisor.setSupervisorFullName(updatedSupervisor.getSupervisorFullName());
+                            if (updatedSupervisor.getPassword() != null)
+                                findSupervisor.setPassword(updatedSupervisor.getPassword());
+                            if (updatedSupervisor.getPlantId() != null)
+                                findSupervisor.setPlantId(updatedSupervisor.getPlantId());
+                            if (updatedSupervisor.getPlantName() != null)
+                                findSupervisor.setPlantName(updatedSupervisor.getPlantName());
+
+                            List<Supervisor> list = new ArrayList<>();
+                            list.addAll(searchSupervisor);
+                            list.add(findSupervisor);
+
+                            findSup.setSupervisors(list);
+
+                            List<Superior> listSuperior = new ArrayList<>();
+                            listSuperior.addAll(searchSup);
+                            listSuperior.add(findSup);
+
+                            BottlingCompany updatedCompany = searchCompanyOptional.get();
+
+                            updatedCompany.setSuperiors(listSuperior);
+                            bCompanyRepo.save(updatedCompany);
+                            return ResponseEntity.ok(updatedSupervisor);
+
+                        }
+                    }
+                }
+            }
+            System.out.println("Superiors List is Empty");
+            return null;
+        }
+        System.out.println("Company is not Present");
+        return null;
+    }
+
+    public boolean deleteSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId){
+        Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
+
+        if (searchBCompanyOptional.isPresent()){
+            List<Superior> superiorsInCompany = searchBCompanyOptional.get().getSuperiors();
+
+            Superior deleteSup = superiorsInCompany.stream()
+                    .filter(sup -> superiorId.equals(sup.getEmployeeId()))
+                    .findAny()
+                    .orElse(null);
+            if (deleteSup == null){
+                System.out.println("Superior not in company");
+                return false;
+            }
+            else {
+                List<Supervisor> supervisorsInCompanyUnderSuperior = deleteSup.getSupervisors();
+
+                Supervisor deleteSupervisor = supervisorsInCompanyUnderSuperior.stream()
+                        .filter(supervisor -> supervisor.getEmployeeId().equals(supervisorId))
+                        .findAny()
+                        .orElse(null);
+
+                if (deleteSupervisor == null) {
+                    System.out.println("No Such Supervisor under Superior in Company");
+                    return false;
+                } else {
+                    supervisorsInCompanyUnderSuperior.remove(deleteSupervisor);
+                    Superior updatedSuperior = deleteSup;
+
+                    superiorsInCompany.remove(deleteSup);
+                    updatedSuperior.setSupervisors(supervisorsInCompanyUnderSuperior);
+                    superiorsInCompany.add(updatedSuperior);
+
+                    BottlingCompany updatedCompany = searchBCompanyOptional.get();
+                    updatedCompany.setSuperiors(superiorsInCompany);
+
+                    bCompanyRepo.save(updatedCompany);
+                }
+            }
+        }
+        System.out.println("Company not present in DB");
+        return false;
+    }
 
 }

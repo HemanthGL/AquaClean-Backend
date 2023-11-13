@@ -10,7 +10,7 @@ public class Supervisor {
 
     private String plantName;
 
-    private int plantId;
+    private String plantId;
 
     // plant metrics
     // private List<PlantMetrics> metrics/visitData  ==> Updated to move to separate Collection
@@ -47,11 +47,11 @@ public class Supervisor {
         this.plantName = plantName;
     }
 
-    public int getPlantId() {
+    public String getPlantId() {
         return plantId;
     }
 
-    public void setPlantId(int plantId) {
+    public void setPlantId(String plantId) {
         this.plantId = plantId;
     }
 

@@ -2,6 +2,7 @@ package com.aquaclean.backend.controller;
 
 import com.aquaclean.backend.models.BottlingCompany;
 import com.aquaclean.backend.models.Superior;
+import com.aquaclean.backend.models.Supervisor;
 import com.aquaclean.backend.services.BottlingCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins="https://localhost:4200")
+@CrossOrigin(origins="http://localhost:4200/")
+//http://localhost:4200/logIn
+@RequestMapping("/")
 public class BottlingCompanyController {
 
     @Autowired
@@ -62,5 +65,32 @@ public class BottlingCompanyController {
     @DeleteMapping("/v1/company/{company_id}/superior/{superior_id}")
     public boolean deleteSuperiorByIdInCompany(@PathVariable String company_id, @PathVariable String superior_id){
         return service.deleteSuperiorByIdInCompany(company_id, superior_id);
+    }
+
+    // ================================================== SUPERVISORS =====================================================
+
+    @GetMapping("/v1/company/{company_id}/superior/{superior_id}/supervisor")
+    public List<Supervisor> getAllSupervisorsInCompanyUnderSuperior(@PathVariable String company_id, @PathVariable String superior_id){
+        return service.getAllSupervisorsInCompanyUnderSuperior(company_id, superior_id);
+    }
+
+    @PostMapping("/v1/company/{company_id}/superior/{superior_id}/supervisor")
+    public Supervisor saveSupervisorInCompanyUnderSuperior(@PathVariable String company_id, @PathVariable String superior_id, @RequestBody Supervisor newSupervisor){
+        return service.saveSupervisorInCompanyUnderSuperior(company_id, superior_id, newSupervisor);
+    }
+
+    @GetMapping("/v1/company/{company_id}/superior/{superior_id}/supervisor/{supervisor_id}")
+    public Supervisor getSupervisorByIdInCompanyUnderSuperior(@PathVariable String company_id, @PathVariable String superior_id, @PathVariable String supervisor_id){
+        return service.getSupervisorByIdInCompanyUnderSuperior(company_id, superior_id, supervisor_id);
+    }
+
+    @PatchMapping("/v1/company/{company_id}/superior/{superior_id}/supervisor/{supervisor_id}")
+    public ResponseEntity<Supervisor> updateSupervisorByIdInCompanyUnderSuperior(@PathVariable String company_id, @PathVariable String superior_id, @PathVariable String supervisor_id, @RequestBody Supervisor updatedSupervisor){
+        return service.updateSupervisorByIdInCompanyUnderSuperior(company_id, superior_id, supervisor_id, updatedSupervisor);
+    }
+
+    @DeleteMapping("/v1/company/{company_id}/superior/{superior_id}/supervisor/{supervisor_id}")
+    public boolean deleteSupervisorByIdInCompanyUnderSuperior(@PathVariable String company_id, @PathVariable String superior_id, @PathVariable String supervisor_id){
+        return service.deleteSupervisorByIdInCompanyUnderSuperior(company_id, superior_id, supervisor_id);
     }
 }
