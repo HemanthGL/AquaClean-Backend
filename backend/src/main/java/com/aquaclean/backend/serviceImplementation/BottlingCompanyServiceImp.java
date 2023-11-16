@@ -377,6 +377,7 @@ public class BottlingCompanyServiceImp implements BottlingCompanyService {
                             BottlingCompany updatedCompany = searchCompanyOptional.get();
 
                             updatedCompany.setSuperiors(listSuperior);
+                            bCompanyRepo.delete(searchCompanyOptional.get());
                             bCompanyRepo.save(updatedCompany);
                             return ResponseEntity.ok(updatedSupervisor);
 
@@ -393,7 +394,7 @@ public class BottlingCompanyServiceImp implements BottlingCompanyService {
 
     public boolean deleteSupervisorByIdInCompanyUnderSuperior(String companyId, String superiorId, String supervisorId){
         Optional<BottlingCompany> searchBCompanyOptional = bCompanyRepo.findById(companyId);
-
+        System.out.println(companyId);
         if (searchBCompanyOptional.isPresent()){
             List<Superior> superiorsInCompany = searchBCompanyOptional.get().getSuperiors();
 
@@ -428,6 +429,8 @@ public class BottlingCompanyServiceImp implements BottlingCompanyService {
                     updatedCompany.setSuperiors(superiorsInCompany);
 
                     bCompanyRepo.save(updatedCompany);
+                    System.out.println("Supervisor Deleted Succesfully");
+                    return true;
                 }
             }
         }
