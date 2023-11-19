@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins="http://localhost:4200/")
+@CrossOrigin(origins="https://aquaclean-backend-production.up.railway.app/")
 //http://localhost:4200/logIn
 @RequestMapping("/")
 public class BottlingCompanyController {
