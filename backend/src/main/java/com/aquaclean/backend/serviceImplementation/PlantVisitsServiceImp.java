@@ -66,4 +66,16 @@ public class PlantVisitsServiceImp implements PlantVisitsService {
         System.out.println("No plant visits at all by Supervisor.");
         return null;
     }
+
+    @Override
+    public PlantVisits getPlantVisitByPlantVisitId(String plantVisitId){
+        Optional<PlantVisits> visit = pVisitsRepo.findById(plantVisitId);
+
+        if (visit.isPresent()){
+            return visit.get();
+        }
+        else
+            System.out.println("No such plant visit found.");
+        return null;
+    }
 }

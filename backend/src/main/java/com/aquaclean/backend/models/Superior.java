@@ -10,6 +10,16 @@ public class Superior {
 
     private String employeeId;
 
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    private String emailId;
+
     List<Supervisor> supervisors;
 
     public String getSuperiorFullName() {

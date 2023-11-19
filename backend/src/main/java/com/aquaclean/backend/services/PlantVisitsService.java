@@ -33,4 +33,11 @@ public interface PlantVisitsService {
      * @return PlantVisit saved into the DB
      */
     public PlantVisits savePlantVisit(PlantVisits visit);
+
+    /**
+     * GET
+     * @param plantVisitId PlantVisitId issued during DB entry
+     * @return plant Visit Object from the DB is returned
+     */
+    public PlantVisits getPlantVisitByPlantVisitId(String plantVisitId);
 }

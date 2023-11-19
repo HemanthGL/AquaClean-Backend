@@ -12,8 +12,18 @@ public class Supervisor {
 
     private String plantId;
 
+    private String emailId;
+
     // plant metrics
     // private List<PlantMetrics> metrics/visitData  ==> Updated to move to separate Collection
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
     public String getSupervisorFullName() {
         return supervisorFullName;

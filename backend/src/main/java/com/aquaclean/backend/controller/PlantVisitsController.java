@@ -34,4 +34,9 @@ public class PlantVisitsController {
     public PlantVisits getSpecificPlantVisitOfSupervisor(@PathVariable String supervisor_id, @PathVariable String plant_visit_id){
         return service.getSpecificPlantVisitOfSupervisor(supervisor_id, plant_visit_id);
     }
+
+    @GetMapping("/plantVisit/{plant_visit_id}")
+    public PlantVisits getPlantVisitByPlantVisitId(@PathVariable String plant_visit_id){
+        return service.getPlantVisitByPlantVisitId(plant_visit_id);
+    }
 }
